@@ -5,9 +5,9 @@
 
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
 static Window *s_window;
+static GBitmap *s_res_circle_small_white;
 static GBitmap *s_res_diamond_small_white;
 static GBitmap *s_res_square_small_white;
-static GBitmap *s_res_circle_small_white;
 static ActionBarLayer *s_actionbarlayer_1;
 
 static void initialise_ui(void) {
@@ -15,9 +15,9 @@ static void initialise_ui(void) {
   window_set_background_color(s_window, GColorBlack);
   window_set_fullscreen(s_window, true);
   
+  s_res_circle_small_white = gbitmap_create_with_resource(RESOURCE_ID_CIRCLE_SMALL_WHITE);
   s_res_diamond_small_white = gbitmap_create_with_resource(RESOURCE_ID_DIAMOND_SMALL_WHITE);
   s_res_square_small_white = gbitmap_create_with_resource(RESOURCE_ID_SQUARE_SMALL_WHITE);
-  s_res_circle_small_white = gbitmap_create_with_resource(RESOURCE_ID_CIRCLE_SMALL_WHITE);
   // s_actionbarlayer_1
   s_actionbarlayer_1 = action_bar_layer_create();
   action_bar_layer_add_to_window(s_actionbarlayer_1, s_window);
@@ -31,9 +31,9 @@ static void initialise_ui(void) {
 static void destroy_ui(void) {
   window_destroy(s_window);
   action_bar_layer_destroy(s_actionbarlayer_1);
+  gbitmap_destroy(s_res_circle_small_white);
   gbitmap_destroy(s_res_diamond_small_white);
   gbitmap_destroy(s_res_square_small_white);
-  gbitmap_destroy(s_res_circle_small_white);
 }
 // END AUTO-GENERATED UI CODE
 
@@ -124,7 +124,7 @@ static void init_bitmaps(void) {
 	s_bmp_diamond	= gbitmap_create_with_resource(RESOURCE_ID_DIAMOND_WHITE);
 	s_bmp_square	= gbitmap_create_with_resource(RESOURCE_ID_SQUARE_WHITE);
 	// init bitmap layers
-	num_layers = 4 + rand() % 4;//rand_in_range(4, 7);
+	num_layers = 4 + rand() % 4; // rand in range [4, 7]
 	bitmap_answer_index = num_layers - 1;
 	bitmap_layers = (BitmapLayer **)calloc(num_layers, sizeof(BitmapLayer *));
 	bitmap_answers = (int *)calloc(num_layers, sizeof(int));

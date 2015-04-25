@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "common.h"
+#include "game_shape_memory.h"
 #include "game_ddr.h"
 
 
@@ -8,7 +9,8 @@ static void init() {
 	
 	game_init();
 	
-	show_game_ddr();
+	show_game_shape_memory();
+//	show_game_ddr();
 }
 
 static void deinit() {
