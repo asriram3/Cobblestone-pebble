@@ -1,5 +1,10 @@
 {
-    "appKeys": {},
+    "appKeys": {
+        "flag": 3,
+        "gameStatus": 2,
+        "players": 0,
+        "ready": 1
+    },
     "capabilities": [
         ""
     ],
@@ -8,6 +13,31 @@
     "projectType": "native",
     "resources": {
         "media": [
+            {
+                "file": "fonts/04B_19__.TTF",
+                "name": "FONT_FAP_40",
+                "type": "font"
+            },
+            {
+                "file": "fonts/04B_19__.TTF",
+                "name": "FONT_FAP_35",
+                "type": "font"
+            },
+            {
+                "file": "fonts/04B_19__.TTF",
+                "name": "FONT_FAP_22",
+                "type": "font"
+            },
+            {
+                "file": "fonts/OSP-DIN_44.ttf",
+                "name": "FONT_DEFAULT_20",
+                "type": "font"
+            },
+            {
+                "file": "fonts/OSP-DIN_44.ttf",
+                "name": "FONT_DEFAULT_18",
+                "type": "font"
+            },
             {
                 "file": "images/SquareSmall.png",
                 "name": "SQUARE_SMALL",
