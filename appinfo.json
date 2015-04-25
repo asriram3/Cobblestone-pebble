@@ -3,18 +3,34 @@
     "capabilities": [
         ""
     ],
-    "companyName": "Pebble",
-    "longName": "Tutorial-1-1",
+    "companyName": "aditsri@gmail.com",
+    "longName": "Cobblestone-v1",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "images/arrow-up.png",
+                "name": "ARROW_UP",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/arrow-down.png",
+                "name": "ARROW_DOWN",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/arrow-right.png",
+                "name": "ARROW_RIGHT",
+                "type": "png-trans"
+            }
+        ]
     },
     "sdkVersion": "2",
-    "shortName": "Tutorial-1-1",
-    "uuid": "67ca9296-1dd2-466d-a02a-0e79d184c6ea",
+    "shortName": "Cobblestone-v1",
+    "uuid": "46c94c81-c036-425e-94b8-5c35596c8c4d",
     "versionCode": 1,
     "versionLabel": "1.0",
     "watchapp": {
-        "watchface": true
+        "watchface": false
     }
 }
