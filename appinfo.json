@@ -9,6 +9,36 @@
     "resources": {
         "media": [
             {
+                "file": "images/SquareSmall.png",
+                "name": "SQUARE_SMALL",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/CircleSmall.png",
+                "name": "CIRCLE_SMALL",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/DiamondSmall.png",
+                "name": "DIAMOND_SMALL",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/Square.png",
+                "name": "SQUARE",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/Diamond.png",
+                "name": "DIAMOND",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/Circle.png",
+                "name": "CIRCLE",
+                "type": "png-trans"
+            },
+            {
                 "file": "images/ArrowRight.png",
                 "name": "ARROW_RIGHT",
                 "type": "png-trans"

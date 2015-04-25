@@ -7,7 +7,10 @@ const int kPebbleScreenWidth	= 144;
 const int kPebbleScreenHeight	= 152;
 
 static void coords_from_index(const int rowSizeBits, const int index,
-		int *restrict x, int *restrict y) {
+		int *restrict x, int *restrict y) __attribute__((unused));
+static void coords_from_index(const int rowSizeBits, const int index,
+		int *restrict x, int *restrict y)
+{
 	*x = index % rowSizeBits;
 	*y = index / rowSizeBits;
 }
@@ -51,6 +54,10 @@ BitmapLayer *bitmap_layer_rotate_right(BitmapLayer *bitmapLayer) {
 	const GBitmap *const newBitmap = gbitmap_create_with_data(newBuffer);
 	bitmap_layer_set_bitmap(newBitmapLayer, newBitmap);
 	return newBitmapLayer;
+}
+
+int rand_in_range(int min, int max) {
+	return min + (int)((max - min) * (1.0 * rand() / RAND_MAX));
 }
 
 void game_init() {
