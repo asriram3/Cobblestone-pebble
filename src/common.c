@@ -15,16 +15,16 @@ static int index_from_coords(int rowSizeBits, int x, int y) {
 	return (rowSizeBits * y) + x;
 }
 
-BitmapLayer *bitmap_layer_rotate_right(const BitmapLayer *const bitmapLayer) {
-	const CGFrame frame = layer_get_frame(bitmap_layer_get_layer(bitmapLayer));
+BitmapLayer *bitmap_layer_rotate_right(BitmapLayer *bitmapLayer) {
+	const GRect frame = layer_get_frame(bitmap_layer_get_layer(bitmapLayer));
 	BitmapLayer *const newBitmapLayer = bitmap_layer_create(frame);
 	if (!newBitmapLayer)
 		return NULL;
 	
-	const GBitmap orig				= bitmap_layer_get_bitmap(bitmapLayer);
-	const GSize origSize			= orig.bounds.size;
-	const uint16_t rowSizeBytes		= orig.row_size_bytes;
-	const uint8_t *const origData	= (uint8_t *)orig.addr;
+	const GBitmap *const orig		= bitmap_layer_get_bitmap(bitmapLayer);
+	const GSize origSize			= orig->bounds.size;
+	const uint16_t rowSizeBytes		= orig->row_size_bytes;
+	const uint8_t *const origData	= (uint8_t *)orig->addr;
 	const uint16_t bufferSize		= origSize.h * rowSizeBytes;
 	
 	// malloc bitmap data
@@ -48,7 +48,7 @@ BitmapLayer *bitmap_layer_rotate_right(const BitmapLayer *const bitmapLayer) {
 	}
 	
 	// create new bitmap from our buffer
-	GBitmap newBitmap = gbitmap_create_with_data(newBuffer);
+	const GBitmap *const newBitmap = gbitmap_create_with_data(newBuffer);
 	bitmap_layer_set_bitmap(newBitmapLayer, newBitmap);
 	return newBitmapLayer;
 }

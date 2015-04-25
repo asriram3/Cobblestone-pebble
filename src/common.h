@@ -1,4 +1,5 @@
 #pragma once
+#include <pebble.h>
 
 extern const int kPebbleScreenWidth;
 	// compensates for the status bar.
