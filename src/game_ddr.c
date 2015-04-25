@@ -1,7 +1,7 @@
 #include "game_ddr.h"
 #include "common.h"
-#include "linked_list.h"
-#include "appmessage.h"
+//#include "linked_list.h"
+//#include "appmessage.h"
 #include <pebble.h>
 
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
@@ -47,19 +47,6 @@ static int num_layers;
 static BitmapLayer **bitmap_layers;
 static int *bitmap_answers;
 static int bitmap_answer_index;
-
-static void win() {
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "You win!");
-	appmesg_send_win();
-}
-
-static void lose() {
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "You lose!");
-}
-
-static void out_of_time() {
-	appmesg_send_death();
-}
 
 // bitmaps
 static GBitmap *bitmap_for_index(const int index) {

@@ -1,10 +1,6 @@
 #include <pebble.h>
 #include "main_menu.h"
-
-#define players			0
-#define ready			1
-#define gameStatus		2
-#define flag			3
+#include "common.h"
 
 
 static Window *window;
@@ -51,7 +47,7 @@ void middle_click_handler(ClickRecognizerRef recognizer, void *context) {
 	if (players_waiting > 1) {
 		black = true;
 		// 0 = start game, 1 = correct, 2 = failure
-		dict_write_uint32(it2, flag, 0);
+		dict_write_uint32(it2, APPMESG_FLAG, 0);
 		app_message_outbox_begin(&it2);
 		app_message_outbox_send();
 		
@@ -91,15 +87,15 @@ void init_menu() {
 	fpm_text	= text_layer_create(bounds);
 	text_layer_set_text(top_text, "COBBLE");
 	text_layer_set_text(middle_text, "STONE");
-	text_layer_set_text(bottom_text, "Pending Server..");
+	text_layer_set_text(bottom_text, "Pending server...");
 	text_layer_set_font(top_text, top_font);
 	text_layer_set_font(middle_text, middle_font);
 	text_layer_set_font(bottom_text, bottom_font);
 	text_layer_set_font(fpm_text, fpm_font);
-	text_layer_set_text_alignment(top_text, GTextAlignmentCenter);
-	text_layer_set_text_alignment(middle_text, GTextAlignmentCenter);
-	text_layer_set_text_alignment(bottom_text, GTextAlignmentCenter);
-	text_layer_set_text_alignment(fpm_text, GTextAlignmentCenter);
+	text_layer_set_text_alignment(top_text,		GTextAlignmentCenter);
+	text_layer_set_text_alignment(middle_text,	GTextAlignmentCenter);
+	text_layer_set_text_alignment(bottom_text,	GTextAlignmentCenter);
+	text_layer_set_text_alignment(fpm_text,		GTextAlignmentCenter);
 	layer_add_child(window_layer, text_layer_get_layer(top_text));
 	layer_add_child(window_layer, text_layer_get_layer(middle_text));
 	layer_add_child(window_layer, text_layer_get_layer(bottom_text));
@@ -108,10 +104,10 @@ void init_menu() {
 	GRect move_posy = (GRect) { .origin = { -15, 10 }, .size = { 180, 180 } };
 	layer_set_frame(text_layer_get_layer(top_text), move_posy);
 	
-	GRect move_pos = (GRect) { .origin = { -15, 49 }, .size = { 180, 180 } };
-	layer_set_frame(text_layer_get_layer(middle_text), move_pos);
-	GRect move_pos2 = (GRect) { .origin = { -15, 105 }, .size = { 180, 180 } };
-	layer_set_frame(text_layer_get_layer(bottom_text), move_pos2);
-	GRect move_pos3 = (GRect) { .origin = { -15, 130 }, .size = { 180, 180 } };
-	layer_set_frame(text_layer_get_layer(fpm_text), move_pos3);
+	GRect move_pos1 = GRect(-15, 49, 180, 180);// (GRect) { .origin = { -15, 49 }, .size = { 180, 180 } };
+	layer_set_frame(text_layer_get_layer(middle_text),	move_pos1);
+	GRect move_pos2 = GRect(-15, 105, 180, 180);// (GRect) { .origin = { -15, 105 }, .size = { 180, 180 } };
+	layer_set_frame(text_layer_get_layer(bottom_text),	move_pos2);
+	GRect move_pos3 = GRect(-15, 130, 180, 180);// (GRect) { .origin = { -15, 130 }, .size = { 180, 180 } };
+	layer_set_frame(text_layer_get_layer(fpm_text),		move_pos3);
 }

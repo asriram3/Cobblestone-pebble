@@ -1,5 +1,6 @@
 #include "game_shape_memory.h"
-#include "appmessage.h"
+#include "common.h"
+//#include "appmessage.h"
 #include <pebble.h>
 
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
@@ -124,19 +125,6 @@ void app_timer_callback(void *data) {
 	}
 }
 
-static void win() {
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "You win!");
-	appmesg_send_win();
-}
-
-static void lose() {
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "You lose!");
-}
-
-static void out_of_time() {
-	appmesg_send_death();
-}
-
 // Click handling
 static void animation_stopped_handler(struct Animation *animation, bool finished, void *context) {
 	animation_destroy(animation);
@@ -154,15 +142,12 @@ static void handle_click(const int button) {
 static void click_handler_up(ClickRecognizerRef recognizer, void *context) {
 	handle_click(0);
 }
-
 static void click_handler_select(ClickRecognizerRef recognizer, void *context) {
 	handle_click(1);
 }
-
 static void click_handler_down(ClickRecognizerRef recognizer, void *context) {
 	handle_click(2);
 }
-
 static void click_config_provider(void *context) {
 	window_single_click_subscribe(BUTTON_ID_UP,		click_handler_up);
 	window_single_click_subscribe(BUTTON_ID_SELECT,	click_handler_select);
@@ -184,7 +169,10 @@ static void init_bitmaps(void) {
 	// generate the sequence
 	bitmap_sequence = (int *)calloc(num_bitmaps, sizeof(int));
 	for (int i = 0; i < num_bitmaps; i++) {
-		bitmap_sequence[i] = rand() % 3;
+		// get an evenly distributed random number in [0, 2]
+		do {
+			bitmap_sequence[i] = rand() % 4;
+		} while (bitmap_sequence[i] < 3);
 	}
 	// start the callbacks
 	app_timer_register(500 /* ms */, app_timer_callback, NULL);
