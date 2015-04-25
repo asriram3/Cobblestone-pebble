@@ -1,0 +1,20 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "aditsri@gmail.com",
+    "longName": "Cobblestone-v1",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "2",
+    "shortName": "Cobblestone-v1",
+    "uuid": "46c94c81-c036-425e-94b8-5c35596c8c4d",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
