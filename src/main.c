@@ -64,9 +64,9 @@ static void changeGame() {
 	GameShow gameShow = gameShowForIndex(randIndex);
 	// save the callback to close the new minigame
 	s_gameHideFunc = gameHideForIndex(randIndex);
-	// open the next minigame
+	// open the next minigame after a delay
 	if (gameShow) {
-		gameShow();
+		app_timer_register(1500, (AppTimerCallback)gameShow, NULL);
 	}
 }
 
