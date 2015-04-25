@@ -3,18 +3,18 @@
     "capabilities": [
         ""
     ],
-    "companyName": "aditsri@gmail.com",
-    "longName": "Cobblestone-v1",
+    "companyName": "Pebble",
+    "longName": "Tutorial-1-1",
     "projectType": "native",
     "resources": {
         "media": []
     },
     "sdkVersion": "2",
-    "shortName": "Cobblestone-v1",
-    "uuid": "46c94c81-c036-425e-94b8-5c35596c8c4d",
+    "shortName": "Tutorial-1-1",
+    "uuid": "67ca9296-1dd2-466d-a02a-0e79d184c6ea",
     "versionCode": 1,
     "versionLabel": "1.0",
     "watchapp": {
-        "watchface": false
+        "watchface": true
     }
 }
