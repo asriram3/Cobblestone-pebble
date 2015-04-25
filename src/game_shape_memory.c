@@ -2,8 +2,16 @@
 #include <pebble.h>
 
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
-static void destroy_ui(void) {}
-static void initialise_ui(void) {}
+static Window *s_window;
+
+static void initialise_ui(void) {
+  s_window = window_create();
+  window_set_fullscreen(s_window, false);
+}
+
+static void destroy_ui(void) {
+  window_destroy(s_window);
+}
 // END AUTO-GENERATED UI CODE
 
 static void handle_window_unload(Window* window) {

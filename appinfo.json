@@ -9,17 +9,12 @@
     "resources": {
         "media": [
             {
-                "file": "images/arrow-up.png",
-                "name": "ARROW_UP",
-                "type": "png-trans"
-            },
-            {
-                "file": "images/arrow-down.png",
+                "file": "images/ArrowDown.png",
                 "name": "ARROW_DOWN",
                 "type": "png-trans"
             },
             {
-                "file": "images/arrow-right.png",
+                "file": "images/ArrowRight.png",
                 "name": "ARROW_RIGHT",
                 "type": "png-trans"
             }
