@@ -85,17 +85,20 @@ void app_timer_callback(void *data) {
 	static bool image_is_on_screen = false;
 	if (image_is_on_screen) {
 		// hide image
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "hiding image");
 		image_is_on_screen = false;
 		bitmap_layer_set_bitmap(s_bitmaplayer_1, NULL);
 		app_timer_register(500 /* ms */, app_timer_callback, NULL);
 	} else {
 		if (bitmap_sequence_count < num_bitmaps) {
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "showing image");
 			// show next image
 			image_is_on_screen = true;
 			GBitmap *bitmap = bitmap_for_index(bitmap_sequence[bitmap_sequence_count++]);
 			bitmap_layer_set_bitmap(s_bitmaplayer_1, bitmap);
 			app_timer_register(500 /* ms */, app_timer_callback, NULL);
 		} else {
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "posing question");
 			// pose question
 			char *num_string;
 			switch (question_image_index + 1) {
@@ -126,9 +129,9 @@ void app_timer_callback(void *data) {
 }
 
 // Click handling
-static void animation_stopped_handler(struct Animation *animation, bool finished, void *context) {
-	animation_destroy(animation);
-}
+//static void animation_stopped_handler(struct Animation *animation, bool finished, void *context) {
+//	animation_destroy(animation);
+//}
 
 static void handle_click(const int button) {
 	const GBitmap *actual = bitmap_for_index(bitmap_sequence[question_image_index]);
@@ -159,9 +162,14 @@ static void init_bitmaps(void) {
 	text_layer_set_text(s_textlayer_1, NULL);
 	layer_remove_from_parent((Layer *)s_actionbarlayer_1);
 	// init bitmaps
-	s_bmp_circle	= gbitmap_create_with_resource(RESOURCE_ID_CIRCLE_WHITE);
-	s_bmp_diamond	= gbitmap_create_with_resource(RESOURCE_ID_DIAMOND_WHITE);
-	s_bmp_square	= gbitmap_create_with_resource(RESOURCE_ID_SQUARE_WHITE);
+	if (!(
+	(s_bmp_circle	= gbitmap_create_with_resource(RESOURCE_ID_CIRCLE_WHITE)) &&
+	(s_bmp_diamond	= gbitmap_create_with_resource(RESOURCE_ID_DIAMOND_WHITE)) &&
+	(s_bmp_square	= gbitmap_create_with_resource(RESOURCE_ID_SQUARE_WHITE))
+		)) {
+		
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "NULL image");
+	}
 	// init bitmap layers
 	num_bitmaps = 3 + rand() % 4; // rand in range [3, 6]
 	bitmap_sequence_count = 0;

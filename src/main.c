@@ -5,6 +5,8 @@
 #include "game_shape_memory.h"
 #include "game_ddr.h"
 #include "main_menu.h"
+#include "game_math.h"
+#include "fapp_game.h"
 
 
 #define ACCEL_STEP_MS	50
@@ -22,7 +24,7 @@ char lobby_status[64]	= "test";
 // Games
 typedef void (* GameShow)(void);
 typedef void (* GameHide)(void);
-static const int numGames = 2;
+static const int numGames = 3;
 static void startPlaying();
 static void changeGame();
 static GameHide s_gameHideFunc;
@@ -34,7 +36,9 @@ static GameShow gameShowForIndex(const int index) {
 	case 0:
 		return show_game_ddr;
 	case 1:
-		return show_game_shape_memory;
+		return show_game_math;
+	case 2:
+		return show_game_fapp;
 	default:
 		return NULL;
 	}
@@ -44,20 +48,23 @@ static GameHide gameHideForIndex(const int index) {
 	case 0:
 		return hide_game_ddr;
 	case 1:
-		return hide_game_shape_memory;
+		return hide_game_math;
+	case 2:
+		return hide_game_fapp;
 	default:
 		return NULL;
 	}
 }
 
-static void startPlaying() {
-	changeGame();
-}
+
 
 static void changeGame() {
+	APP_LOG(APP_LOG_LEVEL_DEBUG,"what");
 	// close the current minigame
 	if (s_gameHideFunc) {
+			APP_LOG(APP_LOG_LEVEL_DEBUG,"hiding window");
 		s_gameHideFunc();
+			APP_LOG(APP_LOG_LEVEL_DEBUG,"hid Window");
 	}
 	// select the next minigame
 	const int randIndex = rand() % numGames;
@@ -66,10 +73,17 @@ static void changeGame() {
 	s_gameHideFunc = gameHideForIndex(randIndex);
 	// open the next minigame after a delay
 	if (gameShow) {
+		APP_LOG(APP_LOG_LEVEL_DEBUG,"gameShow");
 		app_timer_register(1500, (AppTimerCallback)gameShow, NULL);
+		APP_LOG(APP_LOG_LEVEL_DEBUG,"gameShown");
 	}
+	APP_LOG(APP_LOG_LEVEL_DEBUG,"now?");
 }
-
+static void startPlaying() {
+	APP_LOG(APP_LOG_LEVEL_DEBUG,"Changing Game..");
+	changeGame();
+	APP_LOG(APP_LOG_LEVEL_DEBUG,"Game Changed");
+}
 	// complete a minigame successfully
 void win() {
 	APP_LOG(APP_LOG_LEVEL_DEBUG, "You win!");
@@ -81,9 +95,10 @@ void win() {
 
 	// lose a minigame
 void lose() {
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "You lose!");
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "You lost!");
 	// no need to send a loss
 	changeGame();
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "loser");
 }
 
 	// run out of time in a minigame

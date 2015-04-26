@@ -70,12 +70,14 @@ static void animation_stopped_handler(struct Animation *animation, bool finished
 }
 
 static void handle_click(const int button) {
+	APP_LOG(APP_LOG_LEVEL_DEBUG,"line 5");
 	const GBitmap *actual = bitmap_layer_get_bitmap(bitmap_layers[bitmap_answer_index]);
 	const GBitmap *guessed = bitmap_for_index(button);
 	if (actual != guessed) {
 		lose();
 		return;
 	}
+		APP_LOG(APP_LOG_LEVEL_DEBUG,"line 6");
 	// slide the shape off screen
 	GRect offscreen_frame = layer_get_frame((Layer *)bitmap_layers[bitmap_answer_index]);
 	offscreen_frame.origin.y = -offscreen_frame.size.h;
@@ -85,6 +87,7 @@ static void handle_click(const int button) {
 		.started = NULL,
 		.stopped = animation_stopped_handler
 	};
+		APP_LOG(APP_LOG_LEVEL_DEBUG,"line 7");
 	animation_set_handlers((Animation *)anim, handlers, bitmap_layers[bitmap_answer_index]);
 	animation_schedule((Animation *)anim);
 	
@@ -92,6 +95,7 @@ static void handle_click(const int button) {
 	if (bitmap_answer_index < 0) {
 		win();
 	}
+		APP_LOG(APP_LOG_LEVEL_DEBUG,"line 8");
 }
 static void click_handler_up(ClickRecognizerRef recognizer, void *context) {
 	handle_click(0);
@@ -106,12 +110,13 @@ static void click_handler_down(ClickRecognizerRef recognizer, void *context) {
 }
 
 static void click_config_provider(void *context) {
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "setting clicks up");
 	window_single_click_subscribe(BUTTON_ID_UP,		click_handler_up);
 	window_single_click_subscribe(BUTTON_ID_SELECT,	click_handler_select);
 	window_single_click_subscribe(BUTTON_ID_DOWN,	click_handler_down);
 }
 
-static void init_bitmaps(void) {
+static void handle_window_load(Window* window){
 	// init bitmaps
 	s_bmp_circle	= gbitmap_create_with_resource(RESOURCE_ID_CIRCLE_WHITE);
 	s_bmp_diamond	= gbitmap_create_with_resource(RESOURCE_ID_DIAMOND_WHITE);
@@ -132,7 +137,14 @@ static void init_bitmaps(void) {
 		layer_add_child(window_get_root_layer(s_window), (Layer *)bitmap_layers[i]);
 	}
 	// action bar
-	action_bar_layer_set_click_config_provider(s_actionbarlayer_1, click_config_provider);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "click config 1");
+	//action_bar_layer_set_click_config_provider(s_actionbarlayer_1, click_config_provider);
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "click config 2");
+}
+
+
+static void init_bitmaps(void) {
+	
 }
 
 static void deinit_bitmaps(void) {
@@ -140,6 +152,7 @@ static void deinit_bitmaps(void) {
 	for (int i = 0; i < num_layers; i++) {
 		bitmap_layer_destroy(bitmap_layers[i]);
 	}
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "deinit bits ddr");
 	free(bitmap_layers);
 	gbitmap_destroy(s_bmp_circle);
 	gbitmap_destroy(s_bmp_diamond);
@@ -152,15 +165,22 @@ static void handle_window_unload(Window* window) {
 }
 
 void show_game_ddr(void) {
+	APP_LOG(APP_LOG_LEVEL_DEBUG,"starting ddr..");
 	initialise_ui();
+	APP_LOG(APP_LOG_LEVEL_DEBUG,"initialized ddr ui..");
 	init_bitmaps();
+	APP_LOG(APP_LOG_LEVEL_DEBUG,"initialized ddr bitmaps..");
 	window_set_window_handlers(s_window, (WindowHandlers) {
+		.load = handle_window_load,
 		.unload = handle_window_unload,
 	});
 	window_set_click_config_provider(s_window, click_config_provider);
+	APP_LOG(APP_LOG_LEVEL_DEBUG,"booty");
 	window_stack_push(s_window, true);
+	APP_LOG(APP_LOG_LEVEL_DEBUG,"am I still alive?");
 }
 
 void hide_game_ddr(void) {
+	APP_LOG(APP_LOG_LEVEL_DEBUG,"LEAVING ddr..");
 	window_stack_remove(s_window, true);
 }

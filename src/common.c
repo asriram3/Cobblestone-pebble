@@ -1,7 +1,8 @@
 #include <pebble.h>
 #include "common.h"
 #include "game_ddr.h"
-
+#include "fapp_game.h"
+#include "game_math.h"
 
 const int kPebbleScreenWidth	= 144;
 const int kPebbleScreenHeight	= 152;
