@@ -2,6 +2,7 @@
     "appKeys": {
         "flag": 3,
         "gameStatus": 2,
+        "healthPack": 4,
         "players": 0,
         "ready": 1
     },
@@ -14,63 +15,13 @@
     "resources": {
         "media": [
             {
-                "file": "images/arrow_up.png",
-                "name": "ARROW_UP",
-                "type": "png-trans"
-            },
-            {
-                "file": "images/arrow_down.png",
-                "name": "ARROW_DOWN",
-                "type": "png-trans"
-            },
-            {
-                "file": "images/ArrowRight.png",
-                "name": "ARROW_RIGHT",
-                "type": "png-trans"
-            },
-            {
-                "file": "images/Circle.png",
-                "name": "CIRCLE",
-                "type": "png-trans"
-            },
-            {
-                "file": "images/Diamond.png",
-                "name": "DIAMOND",
-                "type": "png-trans"
-            },
-            {
-                "file": "images/Square.png",
-                "name": "SQUARE",
-                "type": "png-trans"
-            },
-            {
-                "file": "images/DiamondSmall.png",
-                "name": "DIAMOND_SMALL",
-                "type": "png-trans"
-            },
-            {
-                "file": "images/CircleSmall.png",
-                "name": "CIRCLE_SMALL",
-                "type": "png-trans"
-            },
-            {
-                "file": "images/SquareSmall.png",
-                "name": "SQUARE_SMALL",
-                "type": "png-trans"
-            },
-            {
-                "file": "fonts/OSP-DIN_44.ttf",
-                "name": "FONT_DEFAULT_18",
-                "type": "font"
-            },
-            {
-                "file": "fonts/OSP-DIN_44.ttf",
-                "name": "FONT_DEFAULT_20",
-                "type": "font"
+                "file": "images/Rainbow-Ninja-Unicorn.png",
+                "name": "RAINBOW_NINJA_UNICORN",
+                "type": "png"
             },
             {
                 "file": "fonts/04B_19__.TTF",
-                "name": "FONT_FAP_22",
+                "name": "FONT_FAP_40",
                 "type": "font"
             },
             {
@@ -80,8 +31,63 @@
             },
             {
                 "file": "fonts/04B_19__.TTF",
-                "name": "FONT_FAP_40",
+                "name": "FONT_FAP_22",
                 "type": "font"
+            },
+            {
+                "file": "fonts/OSP-DIN_44.ttf",
+                "name": "FONT_DEFAULT_20",
+                "type": "font"
+            },
+            {
+                "file": "fonts/OSP-DIN_44.ttf",
+                "name": "FONT_DEFAULT_18",
+                "type": "font"
+            },
+            {
+                "file": "images/SquareSmall.png",
+                "name": "SQUARE_SMALL",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/CircleSmall.png",
+                "name": "CIRCLE_SMALL",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/DiamondSmall.png",
+                "name": "DIAMOND_SMALL",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/Square.png",
+                "name": "SQUARE",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/Diamond.png",
+                "name": "DIAMOND",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/Circle.png",
+                "name": "CIRCLE",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/ArrowRight.png",
+                "name": "ARROW_RIGHT",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/arrow_down.png",
+                "name": "ARROW_DOWN",
+                "type": "png-trans"
+            },
+            {
+                "file": "images/arrow_up.png",
+                "name": "ARROW_UP",
+                "type": "png-trans"
             }
         ]
     },

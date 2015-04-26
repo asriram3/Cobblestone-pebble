@@ -9,6 +9,7 @@
 #include "game_bubs.h"
 #include "fapp_game.h"
 
+//#define RIG_TO_TEST 1
 
 #define ACCEL_STEP_MS	50
 
@@ -37,11 +38,11 @@ static GameShow gameShowForIndex(const int index) {
 	case 0:
 		return show_game_ddr;
 	case 1:
-		return show_game_math;
+		return show_game_bubs;
 	case 2:
 		return show_game_fapp;
-	case 3:
-		return show_game_bubs;
+//	case 3:
+//		return show_game_math;
 	default:
 		return NULL;
 	}
@@ -51,11 +52,11 @@ static GameHide gameHideForIndex(const int index) {
 	case 0:
 		return hide_game_ddr;
 	case 1:
-		return hide_game_math;
+		return hide_game_bubs;
 	case 2:
 		return hide_game_fapp;
-	case 3:
-		return hide_game_bubs;
+//	case 3:
+//		return hide_game_math;
 	default:
 		return NULL;
 	}
@@ -64,38 +65,44 @@ static GameHide gameHideForIndex(const int index) {
 
 
 static void changeGame() {
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"what");
+//	APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", __func__);
 	// close the current minigame
 	if (s_gameHideFunc) {
-			APP_LOG(APP_LOG_LEVEL_DEBUG,"hiding window");
+//			APP_LOG(APP_LOG_LEVEL_DEBUG,"hiding window");
 		s_gameHideFunc();
-			APP_LOG(APP_LOG_LEVEL_DEBUG,"hid Window");
+//			APP_LOG(APP_LOG_LEVEL_DEBUG,"hid Window");
+	} else {
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "ChangeGame(): No game hide func.");
 	}
 	// select the next minigame
-	const int randIndex = rand() % numGames;
+	#ifdef RIG_TO_TEST
+		const int randIndex = RIG_TO_TEST;
+	#else
+		const int randIndex = rand() % numGames;
+	#endif // RIG_TO_TEST
 	GameShow gameShow = gameShowForIndex(randIndex);
 	// save the callback to close the new minigame
 	s_gameHideFunc = gameHideForIndex(randIndex);
 	// open the next minigame after a delay
 	if (gameShow) {
-		APP_LOG(APP_LOG_LEVEL_DEBUG,"gameShow");
+//		APP_LOG(APP_LOG_LEVEL_DEBUG,"gameShow");
 		app_timer_register(1500, (AppTimerCallback)gameShow, NULL);
-		APP_LOG(APP_LOG_LEVEL_DEBUG,"gameShown");
+//		APP_LOG(APP_LOG_LEVEL_DEBUG,"gameShown");
 	}
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"now?");
 }
 static void startPlaying() {
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"Changing Game..");
+	// start the game's timer
+	set_time_remaining(MAX_TIME);
+//	APP_LOG(APP_LOG_LEVEL_DEBUG,"Changing Game..");
 	changeGame();
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"Game Changed");
+//	APP_LOG(APP_LOG_LEVEL_DEBUG,"Game Changed");
 }
+
 	// complete a minigame successfully
 void win() {
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "You win!");
+	APP_LOG(APP_LOG_LEVEL_INFO, "You win!");
 	appmesg_send_win();
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "%s()", __func__);
 	changeGame();
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "%s()", __func__);
 }
 
 	// lose a minigame
@@ -103,7 +110,6 @@ void lose() {
 	APP_LOG(APP_LOG_LEVEL_DEBUG, "You lost!");
 	// no need to send a loss
 	changeGame();
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "loser");
 }
 
 	// run out of time in a minigame
@@ -153,6 +159,14 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 			strncpy(prevGameStatus, newGameStatus, sizeof(newGameStatus));
 			
 			break; 
+		case APPMESG_HEALTH_PACK:
+			;
+			char healthPackBuf[64];
+			snprintf(healthPackBuf, sizeof(healthPackBuf), "%s", tuple->value->cstring);
+			if (!strncmp(healthPackBuf, "true", sizeof("true"))) {
+				// add more health
+				set_time_remaining(MAX_TIME);
+			}
 		}
 		snprintf(lobby_status, sizeof(lobby_status), "%s%s", s_buffer1, s_buffer2);
 		menu_change_info(lobby_status);

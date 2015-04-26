@@ -102,7 +102,7 @@ void disc_draw(GContext *ctx, Disc *disc) {
 	double dy = (portal_y-disc->pos.y);
 	double dist = dx*dx + dy*dy;
 	if(dist<225){
-		APP_LOG(APP_LOG_LEVEL_DEBUG,"All I do is win.");
+//		APP_LOG(APP_LOG_LEVEL_DEBUG,"All I do is win.");
 		win();
 	}
 	
@@ -161,12 +161,16 @@ void bubble_init(void) {
   accel_data_service_subscribe(0, NULL);
 
   timer_3 = app_timer_register(ACCEL_STEP_MS, timer_callback_2, NULL);
+	
+	// add time remaining layer
+	layer_add_child(window_get_root_layer(s_main_window), g_time_layer);
 }
 
 void bubble_deinit(void) {
-  accel_data_service_unsubscribe();
-  window_destroy(s_main_window);
 	app_timer_cancel(timer_3);
+  accel_data_service_unsubscribe();
+	window_stack_remove(s_main_window, true);
+  window_destroy(s_main_window);
 }
 
 void show_game_bubs(void){

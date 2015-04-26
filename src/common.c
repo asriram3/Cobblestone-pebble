@@ -6,64 +6,52 @@
 const int kPebbleScreenWidth	= 144;
 const int kPebbleScreenHeight	= 152;
 
-static void coords_from_index(const int rowSizeBits, const int index,
-		int *restrict x, int *restrict y) __attribute__((unused));
-static void coords_from_index(const int rowSizeBits, const int index,
-		int *restrict x, int *restrict y)
-{
-	*x = index % rowSizeBits;
-	*y = index / rowSizeBits;
-}
-static int index_from_coords(int rowSizeBits, int x, int y) {
-	return (rowSizeBits * y) + x;
-}
-
-BitmapLayer *bitmap_layer_rotate_right(BitmapLayer *bitmapLayer) {
-	const GRect frame = layer_get_frame(bitmap_layer_get_layer(bitmapLayer));
-	BitmapLayer *const newBitmapLayer = bitmap_layer_create(frame);
-	if (!newBitmapLayer)
-		return NULL;
-	
-	const GBitmap *const orig		= bitmap_layer_get_bitmap(bitmapLayer);
-	const GSize origSize			= orig->bounds.size;
-	const uint16_t rowSizeBytes		= orig->row_size_bytes;
-	const uint8_t *const origData	= (uint8_t *)orig->addr;
-	const uint16_t bufferSize		= origSize.h * rowSizeBytes;
-	
-	// malloc bitmap data
-	uint8_t *const restrict newBuffer = (uint8_t *)calloc(1, bufferSize);
-	if (!newBuffer) {
-		bitmap_layer_destroy(newBitmapLayer);
-		return NULL;
-	}
-	
-	// rotate bits
-	const int rowSizeBits = rowSizeBytes * 8;
-	for (int x = 0; x < origSize.w; x++) {
-		for (int y = 0; y < origSize.h; y++) {
-			const uint8_t srcMask	= 0x01 << (7 - (x % 8));
-			const uint8_t destMask	= ~(0x01 << (x % 8));
-			// >> 3 is to divide by 8
-			const int srcIndex	= index_from_coords(rowSizeBits, x, y) >> 3;
-			const int destIndex	= index_from_coords(rowSizeBits, origSize.h - y, x) >> 3;
-			newBuffer[destIndex] = (newBuffer[destIndex] & destMask) | (origData[srcIndex] & srcMask);
-		}
-	}
-	
-	// create new bitmap from our buffer
-	const GBitmap *const newBitmap = gbitmap_create_with_data(newBuffer);
-	bitmap_layer_set_bitmap(newBitmapLayer, newBitmap);
-	return newBitmapLayer;
-}
-
 int rand_in_range(int min, int max) {
 	return min + (int)((max - min) * (1.0 * rand() / RAND_MAX));
 }
 
+Layer *g_time_layer;
+int g_time_remaining;
+const int MAX_TIME = 15000; // in ms
+static AppTimer *time_layer_redraw_timer;
+
+static void time_layer_request_redraw(void *data) {
+	g_time_remaining -= 100;
+	layer_mark_dirty(g_time_layer);
+	// check for death
+	if (g_time_remaining < 0) {
+		out_of_time();
+		app_timer_cancel(time_layer_redraw_timer);
+	} else {
+		time_layer_redraw_timer = app_timer_register(100, time_layer_request_redraw, NULL);
+	}
+}
+
+	// only call this to get the start and end values for the animation
+static GRect time_layer_frame_for_time(int timeRemaining) {
+	const int height = (int)(138.0 * timeRemaining / MAX_TIME);
+	return GRect(0, 148 - height, 10, height);
+}
+
+static void draw_time_layer(struct Layer *layer, GContext *ctx) {
+	graphics_context_set_fill_color(ctx, GColorWhite);
+	GRect fillRect = time_layer_frame_for_time(g_time_remaining); //*/
+	graphics_fill_rect(ctx, fillRect, 0, GCornerNone);
+}
+
+void set_time_remaining(int newTimeRemaining) {
+	g_time_remaining = newTimeRemaining;
+	app_timer_cancel(time_layer_redraw_timer);
+	time_layer_redraw_timer = app_timer_register(100, time_layer_request_redraw, NULL);
+}
+
 void game_init() {
-	
+	g_time_layer = layer_create(GRect(0, 10, 10, 138));
+	layer_set_update_proc(g_time_layer, draw_time_layer);
 }
 
 void game_deinit() {
-	
+	app_timer_cancel(time_layer_redraw_timer);
+	layer_remove_from_parent(g_time_layer);
+	layer_destroy(g_time_layer);
 }

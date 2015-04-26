@@ -93,73 +93,66 @@ static AppTimer *timer;
 static int elapsed;
 
 
-
-static void get_answer(){
-	switch(operation){
-		case 1:
-			sign = '+';
-			answer = a + b;
-			break;
-		case 2:
-			sign = '-';
-			answer = a - b;
-			break;
-		case 3:
-			sign = '*';
-			answer = a * b;
-			break;
-		default:
-			sign = 'a';
-			answer = 23;
-			break;
+static void get_answer(void) {
+	switch(operation) {
+	case 1:
+		sign = '+';
+		answer = a + b;
+		break;
+	case 2:
+		sign = '-';
+		answer = a - b;
+		break;
+	case 3:
+		sign = '*';
+		answer = a * b;
+		break;
+	default:
+		sign = 'a';
+		answer = 23;
+		break;
 	}
-	choice = rand()%4;
-	int f = rand()%15;
-	int g = rand()%15;
-	if((f==answer)||(g==answer)){
-			while(f==answer){
-			f = rand()%15;
-		}
-		while(g==answer){
-			g = rand()%15;
-			while(!(g==f)){
-				g = rand()%15;
-			}
-		}
+	choice = rand() % 4;
+	int f = rand() % 15;
+	int g = rand() % 15;
+	while (f == answer) {
+		f = rand() % 15;
+	}
+	while (g == answer || g == f) {
+		g = rand() % 15;
 	}
 	
+	if (choice == 3) {
+		choice = 0;
+	}
 	
-	if(choice==3){choice = 0;}
-	
-	if(choice==0){
+	if (choice == 0) {
 		c = answer;
 		d = f;
 		e = g;
-	}
-	else if(choice==1){
+	} else if (choice == 1) {
 		d = answer;
 		c = f;
 		e = g;
-	}
-	else if(choice==2){
+	} else if (choice == 2) {
 		e = answer;
 		d = f;
 		c = g;
 	}
 	
-	snprintf(question, sizeof(question), "%i %c %i = ?", a,sign, b);
+	snprintf(question, sizeof(question), "%i %c %i = ?", a, sign, b);
 	text_layer_set_text(quest, question);
 	
-	snprintf(ansa, sizeof(ansa), "%i<" , c);
-	snprintf(ansb, sizeof(ansb), "%i<" , d);
-	snprintf(ansc, sizeof(ansc), "%i<" , e);
+	snprintf(ansa, sizeof(ansa), "%i<", c);
+	snprintf(ansb, sizeof(ansb), "%i<", d);
+	snprintf(ansc, sizeof(ansc), "%i<", e);
 	text_layer_set_text(ans1, ansa);
 	text_layer_set_text(ans2, ansb);
 	text_layer_set_text(ans3, ansc);
 	
 }
 
-static void get_question(){
+static void get_question(void) {
 	srand(time(NULL));
 	a = rand_in_range(1, 9);
 	b = rand_in_range(1, 9);
@@ -167,50 +160,39 @@ static void get_question(){
 	get_answer();
 }
 
-
-
-static void pad_update_proc(Layer *this_layer, GContext *ctx){
+static void pad_update_proc(Layer *this_layer, GContext *ctx) {
 	
-	if(elapsed>155){
+	if (elapsed > 155) {
 		out_of_time();
-	}else{
-		
-
-
+	} else {
 		//Draw time bar
 		graphics_context_set_fill_color(ctx, GColorWhite);
-		graphics_fill_rect(ctx, GRect(0, elapsed , 7, 155-elapsed), 0, GCornerNone);
-
-	//	APP_LOG(APP_LOG_LEVEL_DEBUG, "line 3");
+		graphics_fill_rect(ctx, GRect(0, elapsed, 7, 155 - elapsed), 0, GCornerNone);
+		
 		snprintf(scor, sizeof(scor), "Score: %i", score);
 		text_layer_set_text(scr, scor);
-
-		snprintf(question, sizeof(question), "%i %c %i = ?", a,sign, b);
+		
+		snprintf(question, sizeof(question), "%i %c %i = ?", a, sign, b);
 		text_layer_set_text(quest, question);
-
-		snprintf(ansa, sizeof(ansa), "%i<" , c);
-		snprintf(ansb, sizeof(ansb), "%i<" , d);
-		snprintf(ansc, sizeof(ansc), "%i<" , e);
-		//APP_LOG(APP_LOG_LEVEL_DEBUG, "line 4");
+		
+		snprintf(ansa, sizeof(ansa), "%i<", c);
+		snprintf(ansb, sizeof(ansb), "%i<", d);
+		snprintf(ansc, sizeof(ansc), "%i<", e);
 		text_layer_set_text(ans1, ansa);
 		text_layer_set_text(ans2, ansb);
 		text_layer_set_text(ans3, ansc);
-
-
 	}
-//	APP_LOG(APP_LOG_LEVEL_DEBUG, "line 5");
-	
 }
 
-void check_ans(){
+void check_ans(void) {
 	APP_LOG(APP_LOG_LEVEL_DEBUG, "checking ans");
-	if(button_pressed==(choice+1)){
-				score += 1;
-				if(score > 5){
-					win();
-				}
-			}else{
-				lose();
+	if (button_pressed == choice - 1) {
+		score++;
+		if (score > 5) {
+			win();
+		}
+	} else {
+		lose();
 	}
 	button_pressed = 0;
 	get_question();
@@ -218,7 +200,6 @@ void check_ans(){
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
- 	//text_layer_set_text(s_output_layer, "Up pressed!");
 	button_pressed = 1;
 	check_ans();
  	//layer_mark_dirty(s_pad_layer);
@@ -246,66 +227,64 @@ static void click_config_provider(void *context) {
 }
 
 
-static void timer_callback(){
+static void timer_callback(void) {
 	elapsed += 1;
 	layer_mark_dirty(s_pad_layer);
 	//APP_LOG(APP_LOG_LEVEL_DEBUG, "click");
-	timer = app_timer_register(100, timer_callback, NULL);
+	timer = app_timer_register(100, (AppTimerCallback)timer_callback, NULL);
 }
 
 
-static void init_stuff(){
+static void init_stuff(void) {
 	get_question();
 	
-	timer = app_timer_register(100, timer_callback, NULL);
+	timer = app_timer_register(100, (AppTimerCallback)timer_callback, NULL);
 
 	snprintf(scor, sizeof(scor), "Score: %i", score);
-  text_layer_set_text(scr, scor);
-	
-	
+	text_layer_set_text(scr, scor);
 }
 
-static void handle_window_load(Window *window){
+static void handle_window_load(Window *window) {
 	Layer *window_layer = window_get_root_layer(window);
-  GRect window_bounds = layer_get_bounds(window_layer);
+	GRect window_bounds = layer_get_bounds(window_layer);
 	s_pad_layer = layer_create(GRect(0, 0, window_bounds.size.w, window_bounds.size.h));
 	
-  layer_add_child(window_layer, s_pad_layer);
+	layer_add_child(window_layer, s_pad_layer);
 	
-  // Set the update_proc
-  layer_set_update_proc(s_pad_layer, pad_update_proc);
+	// Set the update_proc
+	layer_set_update_proc(s_pad_layer, pad_update_proc);
+	
+	// add time remaining layer
+	layer_add_child(window_get_root_layer(window), g_time_layer);
 }
 
-static void deinit_stuff(){
+static void deinit_stuff(void) {
 	layer_destroy(s_pad_layer);
 	app_timer_cancel(timer);
 }
 
 static void handle_window_unload(Window* window) {
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "killing math");
-  destroy_ui();
+	destroy_ui();
 	deinit_stuff();
-	APP_LOG(APP_LOG_LEVEL_DEBUG, "math killed");
 }
 
 void show_game_math(void) {
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"starting math..");
-  initialise_ui();
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "starting math...");
+	initialise_ui();
 	score = 0;
 	button_pressed = 0;
 	elapsed = 0;
 	init_stuff();
-  window_set_window_handlers(s_window, (WindowHandlers) {
+	window_set_window_handlers(s_window, (WindowHandlers) {
 		.load = handle_window_load,
-    .unload = handle_window_unload,
-  });
+		.unload = handle_window_unload,
+	});
 	window_set_click_config_provider(s_window, click_config_provider);
 	
-  window_stack_push(s_window, true);
+	window_stack_push(s_window, true);
 }
 
 void hide_game_math(void) {
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"leaving math..");
-  window_stack_remove(s_window, true);
-	
+	APP_LOG(APP_LOG_LEVEL_DEBUG, "Free mem: %d", heap_bytes_free());
+	window_stack_remove(s_window, true);
 }

@@ -13,7 +13,7 @@ Pebble.addEventListener('webviewclosed', function(e) {
 
 
 Pebble.addEventListener('appmessage', function(e) {
-  console.log("it worked: " + e.payload.flag);
+//  console.log("it worked: " + e.payload.flag);
   
   if (e.payload.flag === 0) {
     var req1 = new XMLHttpRequest();
@@ -25,6 +25,16 @@ Pebble.addEventListener('appmessage', function(e) {
     console.log('Application Closed');
     req2.open('GET', 'http://coblestoner2.azurewebsites.net/leave/?id=' + id, true);
     req2.send(null);
+} else if (e.payload.flag === 3) {
+	var req3 = new XMLHttpRequest();
+	console.log('App won');
+    req3.open('GET', 'http://coblestoner2.azurewebsites.net/won/?id=' + id, true);
+    req3.send(null);
+} else if (e.payload.flag === 4) {
+	var req4 = new XMLHttpRequest();
+	console.log('App died');
+    req4.open('GET', 'http://coblestoner2.azurewebsites.net/died/?id=' + id, true);
+    req4.send(null);
 }
 });
 
@@ -48,8 +58,9 @@ function server_check() {
 				var players = response.players.toString();
 				var ready = response.ready.toString();
 				var gameStatus = response.gameStatus.toString();
+				var healthPack = response.healthPack.toString();
 				//console.log("Players: "+players+" ready:"+ready+" game:"+gameStatus);
-				var dict = { 'players': players, 'ready': ready , 'gameStatus': gameStatus };
+				var dict = { 'players': players, 'ready': ready , 'gameStatus': gameStatus, 'healthPack': healthPack };
 				Pebble.sendAppMessage(dict);
 			} else {
 				console.log('Error');

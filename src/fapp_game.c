@@ -8,6 +8,7 @@ static TextLayer *top_text_2;
 static TextLayer *middle_text_2;
 static BitmapLayer *image_layer_2;
 Layer *window_layer_2;
+GFont top_font;
 
 GBitmap *arrow_up;
 GBitmap *arrow_down;
@@ -24,7 +25,7 @@ int amount_2 = 50;
 
 void goToNextLevel(){
 	//At this point the game is won. Send a win-ping to server and change game.
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"All I do is win.");
+//	APP_LOG(APP_LOG_LEVEL_DEBUG,"All I do is win.");
 	win();
 	faps_2 = 0;
 }
@@ -93,7 +94,7 @@ void fapp_game_init(){
 		layer_add_child(window_layer_2, text_layer_get_layer(middle_text_2));
 
     //draw title
-    GFont top_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_FAP_22));
+    top_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_FAP_22));
     text_layer_set_font(top_text_2, top_font);
     text_layer_set_font(middle_text_2, top_font);
 	
@@ -118,17 +119,22 @@ void fapp_game_init(){
 	
     accel_data_service_subscribe(0, NULL);
     timer_2 = app_timer_register(ACCEL_STEP_MS, timer_callback, NULL);
-		
+	
+	// add time remaining layer
+	layer_add_child(window_get_root_layer(window_2), g_time_layer);
 }
 
 void fapp_game_deinit(){
-	
-	accel_data_service_unsubscribe();
+  gbitmap_destroy(arrow_up);
+  gbitmap_destroy(arrow_down);
+  accel_data_service_unsubscribe();
   text_layer_destroy(top_text_2);
   text_layer_destroy(middle_text_2);
- 	bitmap_layer_destroy(image_layer_2);
+  bitmap_layer_destroy(image_layer_2);
+  //layer_destroy(window_layer_2);
+  fonts_unload_custom_font(top_font);
   window_destroy(window_2);
-	app_timer_cancel(timer_2);
+  app_timer_cancel(timer_2);
 	
 }
 
@@ -137,22 +143,15 @@ static void handle_window_unload(Window* window) {
 }
 
 void show_game_fapp(void) {
-	
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"starting fapp..");
 	fapp_game_init();
 	
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"Setting window handles");
 	window_set_window_handlers(window_2, (WindowHandlers) {
 		.unload = handle_window_unload,
 	});
 	//window_set_click_config_provider(window, click_config_provider);
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"booty");
 	window_stack_push(window_2, true);
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"am I still alive?");
-	
 }
 
 void hide_game_fapp(void) {
-	APP_LOG(APP_LOG_LEVEL_DEBUG,"LEAVING ddr..");
 	window_stack_remove(window_2, true);
 }

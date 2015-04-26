@@ -184,6 +184,9 @@ static void init_bitmaps(void) {
 	}
 	// start the callbacks
 	app_timer_register(500 /* ms */, app_timer_callback, NULL);
+	
+	// add time remaining layer
+	layer_add_child(window_get_root_layer(s_window), g_time_layer);
 }
 
 static void deinit_bitmaps(void) {

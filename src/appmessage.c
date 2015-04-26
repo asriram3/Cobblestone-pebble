@@ -12,11 +12,11 @@ static void appmesg_send_uint(uint32_t num_to_send);
 
 
 void appmesg_send_win() {
-	appmesg_send_uint(1);
+	appmesg_send_uint(3);
 }
 
 void appmesg_send_death() {
-	appmesg_send_uint(2);
+	appmesg_send_uint(4);
 }
 
 static void appmesg_send_uint(uint32_t num_to_send) {
