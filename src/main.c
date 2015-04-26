@@ -6,6 +6,7 @@
 #include "game_ddr.h"
 #include "main_menu.h"
 #include "game_math.h"
+#include "game_bubs.h"
 #include "fapp_game.h"
 
 
@@ -24,7 +25,7 @@ char lobby_status[64]	= "test";
 // Games
 typedef void (* GameShow)(void);
 typedef void (* GameHide)(void);
-static const int numGames = 3;
+static const int numGames = 4;
 static void startPlaying();
 static void changeGame();
 static GameHide s_gameHideFunc;
@@ -39,6 +40,8 @@ static GameShow gameShowForIndex(const int index) {
 		return show_game_math;
 	case 2:
 		return show_game_fapp;
+	case 3:
+		return show_game_bubs;
 	default:
 		return NULL;
 	}
@@ -51,6 +54,8 @@ static GameHide gameHideForIndex(const int index) {
 		return hide_game_math;
 	case 2:
 		return hide_game_fapp;
+	case 3:
+		return hide_game_bubs;
 	default:
 		return NULL;
 	}
