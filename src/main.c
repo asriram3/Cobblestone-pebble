@@ -8,6 +8,7 @@
 #include "game_math.h"
 #include "game_bubs.h"
 #include "fapp_game.h"
+#include "death.h"
 
 //#define RIG_TO_TEST 1
 
@@ -102,6 +103,8 @@ static void startPlaying() {
 void win() {
 	APP_LOG(APP_LOG_LEVEL_INFO, "You win!");
 	appmesg_send_win();
+	appmesg_send_win();
+	appmesg_send_win();
 	changeGame();
 }
 
@@ -117,8 +120,12 @@ void out_of_time() {
 	APP_LOG(APP_LOG_LEVEL_DEBUG, "You died!");
 	appmesg_send_death();
 	// close the current minigame
-	s_gameHideFunc();
-	s_gameHideFunc = NULL;
+	if (s_gameHideFunc) {
+		s_gameHideFunc();
+		s_gameHideFunc = NULL;
+	}
+	// show the death screen
+	show_death();
 }
 
 

@@ -12,7 +12,7 @@ int rand_in_range(int min, int max) {
 
 Layer *g_time_layer;
 int g_time_remaining;
-const int MAX_TIME = 15000; // in ms
+const int MAX_TIME = 25000; // in ms
 static AppTimer *time_layer_redraw_timer;
 
 static void time_layer_request_redraw(void *data) {
